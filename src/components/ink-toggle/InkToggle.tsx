@@ -91,7 +91,7 @@ export function InkToggle({ iconStyle }: InkToggleProps) {
   const measure = () => {
     iconRef.current?.measureInWindow((x, y, w, h) => {
       originX.value = x + w / 2;
-      originY.value = y + h / 2 + 24;
+      originY.value = y + h / 2 + 36;
     });
   };
 
