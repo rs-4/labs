@@ -11,6 +11,7 @@ Live pages: [rselmi.com/lab](https://rselmi.com/lab)
 | # | Animation | Folder | Description |
 | - | --------- | ------ | ----------- |
 | 01 | Pull Refresh Island | [`src/components/pull-refresh-island`](src/components/pull-refresh-island) | Gooey pull-to-refresh where a water drop is pulled out of the Dynamic Island. |
+| 02 | Ink Toggle | [`src/components/ink-toggle`](src/components/ink-toggle) | A dark mode switch that pours the theme: a drop of ink falls and floods the screen. |
 
 ## Run
 

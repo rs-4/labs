@@ -69,11 +69,11 @@ export default function LabHome({ onOpen }: Props) {
 
         <View className="mt-10 flex-row items-center justify-center gap-3">
           <Pressable
-            onPress={() => Linking.openURL("https://github.com/rs-4/lab")}
+            onPress={() => Linking.openURL("https://github.com/rs-4/labs")}
             className="px-2 py-2 active:opacity-50"
           >
             <Text className="font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-400 underline">
-              github.com/rs-4/lab
+              github.com/rs-4/labs
             </Text>
           </Pressable>
           <Text className="font-mono text-[10px] text-neutral-300">·</Text>
