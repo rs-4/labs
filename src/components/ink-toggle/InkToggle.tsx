@@ -86,12 +86,12 @@ export function InkToggle({ iconStyle }: InkToggleProps) {
   // reaches every corner no matter where the wave starts from
   const coverR = Math.hypot(width, height) + 120;
 
-  // the drip starts at the bottom edge of the glyph itself, slightly
-  // overlapping it: the night visibly spills out of the moon
+  // the drip starts a few points below the glyph, so the drop forms
+  // under the moon without eating into it
   const measure = () => {
     iconRef.current?.measureInWindow((x, y, w, h) => {
       originX.value = x + w / 2;
-      originY.value = y + h / 2 + 13;
+      originY.value = y + h / 2 + 24;
     });
   };
 
