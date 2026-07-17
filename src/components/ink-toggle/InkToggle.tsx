@@ -9,6 +9,7 @@ import {
   useImage,
 } from "@shopify/react-native-skia";
 import * as Haptics from "expo-haptics";
+import { StatusBar } from "expo-status-bar";
 import { SymbolView } from "expo-symbols";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -64,6 +65,10 @@ export function InkToggle({ iconStyle }: InkToggleProps) {
   const { width, height } = useWindowDimensions();
   const isDark = useColorScheme() === "dark";
   const [animating, setAnimating] = useState(false);
+  // the status bar keeps the OLD theme's style while the wave runs, and
+  // flips only when the overlay is gone (the bar is system UI: it is not
+  // in the screenshot, so it must not change before the wave covers it)
+  const [frozenDark, setFrozenDark] = useState<boolean | null>(null);
   const [shotUri, setShotUri] = useState<string | null>(null);
   const pendingRef = useRef<boolean | null>(null);
   const iconRef = useRef<RNView>(null);
@@ -86,12 +91,11 @@ export function InkToggle({ iconStyle }: InkToggleProps) {
   // reaches every corner no matter where the wave starts from
   const coverR = Math.hypot(width, height) + 120;
 
-  // the drip starts a few points below the glyph, so the drop forms
-  // under the moon without eating into it
+  // the drip forms clearly below the glyph, never touching it
   const measure = () => {
     iconRef.current?.measureInWindow((x, y, w, h) => {
       originX.value = x + w / 2;
-      originY.value = y + h / 2 + 36;
+      originY.value = y + h / 2 + 52;
     });
   };
 
@@ -100,6 +104,7 @@ export function InkToggle({ iconStyle }: InkToggleProps) {
   // opaque screenshot before React commits the unmount, a visible glitch.
   const cleanup = () => {
     setShotUri(null);
+    setFrozenDark(null);
     setAnimating(false);
   };
 
@@ -177,6 +182,7 @@ export function InkToggle({ iconStyle }: InkToggleProps) {
   const press = async () => {
     if (animating) return;
     setAnimating(true);
+    setFrozenDark(isDark);
     iconScale.value = withSequence(
       withTiming(0.8, { duration: 100 }),
       withSpring(1, { damping: 12, stiffness: 260 })
@@ -188,6 +194,7 @@ export function InkToggle({ iconStyle }: InkToggleProps) {
     } catch {
       // no screenshot, flip without the liquid reveal
       Appearance.setColorScheme(isDark ? "light" : "dark");
+      setFrozenDark(null);
       setAnimating(false);
     }
   };
@@ -206,6 +213,7 @@ export function InkToggle({ iconStyle }: InkToggleProps) {
   // overlays the content only while animating.
   return (
     <RNView style={StyleSheet.absoluteFill} pointerEvents="box-none">
+      <StatusBar style={(frozenDark ?? isDark) ? "light" : "dark"} />
       <RNView style={iconStyle ?? styles.center} pointerEvents="box-none">
         <Pressable onPress={press} hitSlop={16}>
           <Animated.View
