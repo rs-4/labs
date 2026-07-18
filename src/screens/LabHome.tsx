@@ -1,9 +1,15 @@
-import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import {
+  ArrowRight01Icon,
+  GithubIcon,
+  Globe02Icon,
+  NewTwitterIcon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import React from "react";
 import { Linking, useColorScheme } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DotGrid } from "@/components/DotGrid";
+import { InkToggle } from "@/components/ink-toggle/InkToggle";
 import { LAB_ENTRIES } from "@/lab";
 import { Pressable, ScrollView, Text, View } from "@/tw";
 
@@ -64,7 +70,7 @@ export default function LabHome({ onOpen }: Props) {
                 {entry.stack.map((tech) => (
                   <Text
                     key={tech}
-                    className="border border-neutral-300 bg-neutral-100 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-neutral-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
+                    className="rounded-full border border-neutral-300 bg-neutral-100 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-neutral-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
                   >
                     {tech}
                   </Text>
@@ -74,26 +80,49 @@ export default function LabHome({ onOpen }: Props) {
           ))}
         </View>
 
-        <View className="mt-10 flex-row items-center justify-center gap-3">
-          <Pressable
-            onPress={() => Linking.openURL("https://github.com/rs-4/labs")}
-            className="px-2 py-2 active:opacity-50"
-          >
-            <Text className="font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-400 underline dark:text-neutral-500">
-              github.com/rs-4/labs
-            </Text>
-          </Pressable>
-          <Text className="font-mono text-[10px] text-neutral-300 dark:text-neutral-600">·</Text>
-          <Pressable
-            onPress={() => Linking.openURL("https://rselmi.com")}
-            className="px-2 py-2 active:opacity-50"
-          >
-            <Text className="font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-400 underline dark:text-neutral-500">
-              rselmi.com
-            </Text>
-          </Pressable>
+        <View className="mt-10 flex-row flex-wrap items-center justify-center gap-2">
+          {[
+            {
+              icon: GithubIcon,
+              label: "rs-4/labs",
+              url: "https://github.com/rs-4/labs",
+            },
+            {
+              icon: Globe02Icon,
+              label: "rselmi.com",
+              url: "https://rselmi.com",
+            },
+            {
+              icon: NewTwitterIcon,
+              label: "@rsStats_",
+              url: "https://x.com/rsStats_",
+            },
+          ].map((link) => (
+            <Pressable
+              key={link.label}
+              onPress={() => Linking.openURL(link.url)}
+              className="flex-row items-center gap-1.5 px-2 py-2 active:opacity-50"
+            >
+              <HugeiconsIcon
+                icon={link.icon}
+                size={13}
+                color={isDark ? "#737373" : "#a3a3a3"}
+              />
+              <Text className="font-mono text-[10px] uppercase tracking-[0.14em] text-neutral-400 dark:text-neutral-500">
+                {link.label}
+              </Text>
+            </Pressable>
+          ))}
         </View>
       </ScrollView>
+
+      <InkToggle
+        iconStyle={{
+          position: "absolute",
+          top: insets.top + 64,
+          right: 16,
+        }}
+      />
     </View>
   );
 }
