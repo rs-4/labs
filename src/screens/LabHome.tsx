@@ -34,7 +34,7 @@ export default function LabHome({ onOpen }: Props) {
         showsVerticalScrollIndicator={false}
       >
         <Text className="font-mono text-[11px] uppercase tracking-[0.22em] text-neutral-400 dark:text-neutral-500">
-          / Lab
+          / rslab
         </Text>
         <Text className="mt-2 text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
           My work
