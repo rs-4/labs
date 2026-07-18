@@ -6,9 +6,15 @@ type Props = {
   spacing?: number;
   size?: number;
   color?: string;
+  opacity?: number;
 };
 
-export function DotGrid({ spacing = 24, size = 2.5, color = "#d4d4d4" }: Props) {
+export function DotGrid({
+  spacing = 24,
+  size = 2.5,
+  color = "#d4d4d4",
+  opacity = 1,
+}: Props) {
   const { width, height } = useWindowDimensions();
 
   const points = useMemo(() => {
@@ -22,7 +28,7 @@ export function DotGrid({ spacing = 24, size = 2.5, color = "#d4d4d4" }: Props) 
   }, [width, height, spacing]);
 
   return (
-    <Canvas pointerEvents="none" style={StyleSheet.absoluteFill}>
+    <Canvas pointerEvents="none" style={[StyleSheet.absoluteFill, { opacity }]}>
       <Points
         points={points}
         mode="points"

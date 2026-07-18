@@ -1,3 +1,5 @@
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react-native";
 import React from "react";
 import { Linking, useColorScheme } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -15,7 +17,7 @@ export default function LabHome({ onOpen }: Props) {
 
   return (
     <View className="will-change-variable flex-1 bg-neutral-50 dark:bg-neutral-950">
-      <DotGrid color={isDark ? "#262626" : "#d4d4d4"} />
+      <DotGrid color={isDark ? "#262626" : "#d4d4d4"} opacity={0.45} />
       <ScrollView
         className="flex-1"
         contentContainerStyle={{
@@ -40,13 +42,17 @@ export default function LabHome({ onOpen }: Props) {
             <Pressable
               key={entry.slug}
               onPress={() => onOpen(entry.slug)}
-              className="rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm active:scale-[0.98] active:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900 dark:active:bg-neutral-800"
+              className="border border-neutral-200 bg-white p-5 shadow-sm active:scale-[0.98] active:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900 dark:active:bg-neutral-800"
             >
               <View className="flex-row items-center justify-between">
                 <Text className="font-mono text-[11px] text-neutral-300 tabular-nums dark:text-neutral-600">
                   {String(index + 1).padStart(2, "0")}
                 </Text>
-                <Text className="text-xl text-neutral-300 dark:text-neutral-600">›</Text>
+                <HugeiconsIcon
+                  icon={ArrowRight01Icon}
+                  size={18}
+                  color={isDark ? "#525252" : "#a3a3a3"}
+                />
               </View>
               <Text className="mt-3 text-xl font-semibold text-neutral-900 dark:text-neutral-50">
                 {entry.title}
@@ -58,7 +64,7 @@ export default function LabHome({ onOpen }: Props) {
                 {entry.stack.map((tech) => (
                   <Text
                     key={tech}
-                    className="rounded-full bg-neutral-100 px-3 py-1 font-mono text-[10px] text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400"
+                    className="border border-neutral-300 bg-neutral-100 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-neutral-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
                   >
                     {tech}
                   </Text>
