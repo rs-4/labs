@@ -8,8 +8,10 @@ import { HugeiconsIcon } from "@hugeicons/react-native";
 import React from "react";
 import { Linking, useColorScheme } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SymbolView } from "expo-symbols";
+import { View as RNView } from "react-native";
 import { DotGrid } from "@/components/DotGrid";
-import { InkToggle } from "@/components/ink-toggle/InkToggle";
+import { InkToggle, InkToggleHandle } from "@/components/ink-toggle/InkToggle";
 import { LAB_ENTRIES } from "@/lab";
 import { Pressable, ScrollView, Text, View } from "@/tw";
 
@@ -20,6 +22,14 @@ type Props = {
 export default function LabHome({ onOpen }: Props) {
   const insets = useSafeAreaInsets();
   const isDark = useColorScheme() === "dark";
+  const inkRef = React.useRef<InkToggleHandle>(null);
+  const themeBtnRef = React.useRef<RNView>(null);
+
+  const pourTheme = () => {
+    themeBtnRef.current?.measureInWindow((x, y, w, h) => {
+      inkRef.current?.pour(x + w / 2, y + h + 30);
+    });
+  };
 
   return (
     <View className="will-change-variable flex-1 bg-neutral-50 dark:bg-neutral-950">
@@ -36,9 +46,29 @@ export default function LabHome({ onOpen }: Props) {
         <Text className="font-mono text-[11px] uppercase tracking-[0.22em] text-neutral-400 dark:text-neutral-500">
           / rslab
         </Text>
-        <Text className="mt-2 text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
-          My work
-        </Text>
+        <View className="mt-2 flex-row items-center justify-between">
+          <Text className="text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
+            My work
+          </Text>
+          <Pressable onPress={pourTheme} hitSlop={12} className="active:opacity-60">
+            <RNView
+              ref={themeBtnRef}
+              collapsable={false}
+              style={{
+                width: 36,
+                height: 36,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <SymbolView
+                name={isDark ? "sun.max.fill" : "moon.fill"}
+                size={22}
+                tintColor={isDark ? "#fafafa" : "#0a0a0a"}
+              />
+            </RNView>
+          </Pressable>
+        </View>
         <Text className="mt-2 max-w-[34ch] text-base leading-relaxed text-neutral-500 dark:text-neutral-400">
           React Native experiments, open sourced.
         </Text>
@@ -116,13 +146,7 @@ export default function LabHome({ onOpen }: Props) {
         </View>
       </ScrollView>
 
-      <InkToggle
-        iconStyle={{
-          position: "absolute",
-          top: insets.top + 64,
-          right: 16,
-        }}
-      />
+      <InkToggle ref={inkRef} hideIcon />
     </View>
   );
 }

@@ -11,7 +11,13 @@ import {
 import * as Haptics from "expo-haptics";
 import { StatusBar } from "expo-status-bar";
 import { SymbolView } from "expo-symbols";
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import {
   Appearance,
   StyleProp,
@@ -54,6 +60,14 @@ type InkToggleProps = {
   // where the icon sits inside the screen, e.g. an absolute position.
   // Defaults to centered. The drip always starts under the icon.
   iconStyle?: StyleProp<ViewStyle>;
+  // render only the overlay: drive it from your own button through the
+  // ref handle, so the trigger can live inside a scrolling layout
+  hideIcon?: boolean;
+};
+
+export type InkToggleHandle = {
+  // start the pour from a window coordinate (usually right under your button)
+  pour: (x: number, y: number) => void;
 };
 
 // The trick: on tap we screenshot the current theme, flip the color scheme
@@ -61,7 +75,8 @@ type InkToggleProps = {
 // the rising wave are literally windows into the new theme, so the wave
 // front reveals the other color. No overlay to fade at the end: when the
 // flood covers the screen the screenshot is fully erased.
-export function InkToggle({ iconStyle }: InkToggleProps) {
+export const InkToggle = forwardRef<InkToggleHandle, InkToggleProps>(
+  function InkToggle({ iconStyle, hideIcon }, handleRef) {
   const { width, height } = useWindowDimensions();
   const isDark = useColorScheme() === "dark";
   const [animating, setAnimating] = useState(false);
@@ -179,6 +194,14 @@ export function InkToggle({ iconStyle }: InkToggleProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shot]);
 
+  useImperativeHandle(handleRef, () => ({
+    pour: (x: number, y: number) => {
+      originX.value = x;
+      originY.value = y;
+      press();
+    },
+  }));
+
   const press = async () => {
     if (animating) return;
     setAnimating(true);
@@ -214,21 +237,23 @@ export function InkToggle({ iconStyle }: InkToggleProps) {
   return (
     <RNView style={StyleSheet.absoluteFill} pointerEvents="box-none">
       <StatusBar style={(frozenDark ?? isDark) ? "light" : "dark"} />
-      <RNView style={iconStyle ?? styles.center} pointerEvents="box-none">
-        <Pressable onPress={press} hitSlop={16}>
-          <Animated.View
-            ref={iconRef}
-            onLayout={measure}
-            style={[styles.icon, iconAnimStyle]}
-          >
-            <SymbolView
-              name={isDark ? "sun.max.fill" : "moon.fill"}
-              size={30}
-              tintColor={isDark ? "#fafafa" : "#0a0a0a"}
-            />
-          </Animated.View>
-        </Pressable>
-      </RNView>
+      {!hideIcon && (
+        <RNView style={iconStyle ?? styles.center} pointerEvents="box-none">
+          <Pressable onPress={press} hitSlop={16}>
+            <Animated.View
+              ref={iconRef}
+              onLayout={measure}
+              style={[styles.icon, iconAnimStyle]}
+            >
+              <SymbolView
+                name={isDark ? "sun.max.fill" : "moon.fill"}
+                size={30}
+                tintColor={isDark ? "#fafafa" : "#0a0a0a"}
+              />
+            </Animated.View>
+          </Pressable>
+        </RNView>
+      )}
 
       {/* the Canvas stays mounted so react-native-css never sees siblings
           change and never remounts the subtree mid-animation */}
@@ -262,7 +287,8 @@ export function InkToggle({ iconStyle }: InkToggleProps) {
       </Canvas>
     </RNView>
   );
-}
+  }
+);
 
 const styles = StyleSheet.create({
   center: {
