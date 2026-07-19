@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import CardExpandDemo from "./components/card-expand/Demo";
 import InkToggleDemo from "./components/ink-toggle/Demo";
 import PullRefreshIslandDemo from "./components/pull-refresh-island/Demo";
 
@@ -26,5 +27,13 @@ export const LAB_ENTRIES: LabEntry[] = [
       "A dark mode switch that pours the theme: a drop of ink falls and floods the screen.",
     stack: ["Reanimated", "Skia", "NativeWind"],
     Demo: InkToggleDemo,
+  },
+  {
+    slug: "card-expand",
+    title: "Card Expand",
+    description:
+      "The App Store transition: tap a card, it becomes the screen, drag down to send it back to its slot.",
+    stack: ["Reanimated", "Gesture Handler"],
+    Demo: CardExpandDemo,
   },
 ];
