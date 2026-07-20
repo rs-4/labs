@@ -76,16 +76,27 @@ export function PullSearch({
     open.value = withTiming(0, { duration: 280, easing: OPEN_EASING });
   }, [open, onQueryChange]);
 
-  // interactive keyboard dismiss does not blur the input, listen to the keyboard itself
+  // interactive keyboard dismiss does not blur the input, listen to the keyboard
+  // itself. Only deactivate if the keyboard actually showed: with a hardware
+  // keyboard (simulator) willHide fires without a willShow and would close
+  // the search instantly.
   const activeRef = useRef(false);
   activeRef.current = active;
+  const kbShownRef = useRef(false);
   useEffect(() => {
-    const sub = Keyboard.addListener("keyboardWillHide", () => {
-      if (!activeRef.current) return;
+    const showSub = Keyboard.addListener("keyboardWillShow", () => {
+      kbShownRef.current = true;
+    });
+    const hideSub = Keyboard.addListener("keyboardWillHide", () => {
+      if (!activeRef.current || !kbShownRef.current) return;
+      kbShownRef.current = false;
       inputRef.current?.blur();
       deactivate();
     });
-    return () => sub.remove();
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
   }, [deactivate]);
 
   const onScroll = useAnimatedScrollHandler({
