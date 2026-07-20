@@ -9,6 +9,7 @@ import {
   RoundedRect,
   Skia,
 } from "@shopify/react-native-skia";
+import * as Haptics from "expo-haptics";
 import React, { useCallback, useMemo } from "react";
 import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -79,9 +80,13 @@ export function PullRefreshIsland({
     refreshing.value = 0;
     pull.value = withSpring(0, SPRING);
     cancelAnimation(spin);
+    // the drop gets absorbed back into the island
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }, [pull, refreshing, spin]);
 
   const start = useCallback(async () => {
+    // the drop just detached from the island
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     spin.value = 0;
     spin.value = withRepeat(
       withTiming(2 * Math.PI, { duration: 900, easing: Easing.linear }),
@@ -101,6 +106,9 @@ export function PullRefreshIsland({
   const native = Gesture.Native();
   const pan = Gesture.Pan()
     .simultaneousWithExternalGesture(native)
+    // vertical only: let the navigator's horizontal back swipe win
+    .activeOffsetY([-10, 10])
+    .failOffsetX([-15, 15])
     .onChange((e) => {
       if (refreshing.value === 1) return;
       if (pull.value > 0 || (scrollY.value <= 0 && e.changeY > 0)) {

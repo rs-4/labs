@@ -2,6 +2,7 @@ import type { ComponentType } from "react";
 import CardExpandDemo from "./components/card-expand/Demo";
 import InkToggleDemo from "./components/ink-toggle/Demo";
 import PullRefreshIslandDemo from "./components/pull-refresh-island/Demo";
+import PullSearchDemo from "./components/pull-search/Demo";
 
 export type LabEntry = {
   slug: string;
@@ -35,5 +36,13 @@ export const LAB_ENTRIES: LabEntry[] = [
       "The App Store transition: tap a card, it becomes the screen, drag down to send it back to its slot.",
     stack: ["Reanimated", "Gesture Handler"],
     Demo: CardExpandDemo,
+  },
+  {
+    slug: "pull-search",
+    title: "Pull Search",
+    description:
+      "The iOS 26 search: pull the list down, a liquid glass pill grows from the bottom and the keyboard opens by itself.",
+    stack: ["Reanimated", "Blur", "Haptics"],
+    Demo: PullSearchDemo,
   },
 ];

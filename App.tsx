@@ -1,52 +1,57 @@
 import "./src/global.css";
 
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { useColorScheme } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { LAB_ENTRIES } from "@/lab";
 import LabHome from "@/screens/LabHome";
-import { Pressable, Text, View } from "@/tw";
 
-function Root() {
-  const [activeSlug, setActiveSlug] = useState<string | null>(null);
-  const insets = useSafeAreaInsets();
+export type RootStackParamList = {
+  home: undefined;
+} & Record<string, undefined>;
 
-  const entry = LAB_ENTRIES.find((e) => e.slug === activeSlug);
-
-  if (!entry) {
-    return <LabHome onOpen={setActiveSlug} />;
-  }
-
-  const { Demo } = entry;
-
-  return (
-    <View className="flex-1">
-      <Demo />
-      <Pressable
-        onPress={() => setActiveSlug(null)}
-        className="absolute left-5 flex-row items-center gap-1.5 rounded-full border border-neutral-300 bg-white/90 px-4 py-2 dark:border-neutral-700 dark:bg-neutral-900/90"
-        style={{ bottom: insets.bottom + 16 }}
-      >
-        <Text className="text-sm text-neutral-500 dark:text-neutral-400">←</Text>
-        <Text className="font-mono text-[11px] uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
-          lab
-        </Text>
-      </Pressable>
-    </View>
-  );
-}
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
+  const scheme = useColorScheme();
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <StatusBar style="auto" />
-        <Root />
+        <NavigationContainer
+          theme={scheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+              gestureEnabled: true,
+              fullScreenGestureEnabled: true,
+            }}
+          >
+            <Stack.Screen name="home">
+              {({ navigation }) => (
+                <LabHome onOpen={(slug) => navigation.navigate(slug)} />
+              )}
+            </Stack.Screen>
+            {LAB_ENTRIES.map((entry) => (
+              <Stack.Screen
+                key={entry.slug}
+                name={entry.slug}
+                component={entry.Demo}
+              />
+            ))}
+          </Stack.Navigator>
+        </NavigationContainer>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
