@@ -14,6 +14,7 @@ Live pages: [rselmi.com/lab](https://rselmi.com/lab)
 | 02 | Ink Toggle | [`src/components/ink-toggle`](src/components/ink-toggle) | A dark mode switch that pours the theme: a drop of ink falls and floods the screen. |
 | 03 | Card Expand | [`src/components/card-expand`](src/components/card-expand) | The App Store transition: tap a card, it becomes the screen, drag down to send it back. |
 | 04 | Pull Search | [`src/components/pull-search`](src/components/pull-search) | The iOS 26 search: pull the list down, a liquid glass pill grows from the bottom, keyboard opens by itself. |
+| 05 | Tear to Delete | [`src/components/tear-to-delete`](src/components/tear-to-delete) | Delete by tearing like a receipt: the rip follows your finger, the stub sags, release early and it heals. |
 
 ## Run
 

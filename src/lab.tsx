@@ -3,6 +3,7 @@ import CardExpandDemo from "./components/card-expand/Demo";
 import InkToggleDemo from "./components/ink-toggle/Demo";
 import PullRefreshIslandDemo from "./components/pull-refresh-island/Demo";
 import PullSearchDemo from "./components/pull-search/Demo";
+import TearToDeleteDemo from "./components/tear-to-delete/Demo";
 
 export type LabEntry = {
   slug: string;
@@ -44,5 +45,13 @@ export const LAB_ENTRIES: LabEntry[] = [
       "The iOS 26 search: pull the list down, a liquid glass pill grows from the bottom and the keyboard opens by itself.",
     stack: ["Reanimated", "Blur", "Haptics"],
     Demo: PullSearchDemo,
+  },
+  {
+    slug: "tear-to-delete",
+    title: "Tear to Delete",
+    description:
+      "Delete something by tearing it like a receipt: the rip follows your finger, the stub sags, release early and the paper heals.",
+    stack: ["Skia", "Gesture Handler", "Haptics"],
+    Demo: TearToDeleteDemo,
   },
 ];
