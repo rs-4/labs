@@ -3,6 +3,7 @@ import CardExpandDemo from "./components/card-expand/Demo";
 import InkToggleDemo from "./components/ink-toggle/Demo";
 import PullRefreshIslandDemo from "./components/pull-refresh-island/Demo";
 import PullSearchDemo from "./components/pull-search/Demo";
+import MotionFossilDemo from "./components/motion-fossil/Demo";
 
 export type LabEntry = {
   slug: string;
@@ -44,5 +45,13 @@ export const LAB_ENTRIES: LabEntry[] = [
       "The iOS 26 search: pull the list down, a liquid glass pill grows from the bottom and the keyboard opens by itself.",
     stack: ["Reanimated", "Blur", "Haptics"],
     Demo: PullSearchDemo,
+  },
+  {
+    slug: "motion-fossil",
+    title: "Motion Fossil",
+    description:
+      "A finger trace gains depth, mass and a permanent metallic form on release.",
+    stack: ["WebGPU", "Three.js", "Gesture Handler"],
+    Demo: MotionFossilDemo,
   },
 ];
